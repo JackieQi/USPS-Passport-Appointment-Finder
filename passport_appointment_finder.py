@@ -32,53 +32,29 @@ class USPSAppointmentChecker:
         # get user input (zip code and start date)
         self.get_user_input()
 
+        # normalize start date to API request
         start_date_string = self.normalize_date(self.start_date)
 
         # find nearby facilities
         self.nearby_facilities = self.find_nearby_facilities(start_date_string)
 
         # check appointments for start date
-        appointments = self.check_appointments_for_next_days(
+        self.appointments = self.check_appointments_for_next_days(
             self.start_date, 0)
 
-        if appointments:
+        # if no appointments found, ask user to check more days
+        if self.appointments:
             print(
-                f"!!! Appointments found !!!\nResult: {json.dumps(appointments, indent=2)}")
+                f"!!! Appointments found !!!\nResult: {json.dumps(self.appointments, indent=2)}")
         else:
-            print("No appointments found")
-            user_input = input(
-                f"You want to check for next few days (max {self.MAX_NUMBER_OF_DAYS_TO_CHECK} days from today)? (y/n):")
-            if user_input == 'y':
-
-                input_days = input(
-                    f"How many days do you want to check? (1-{self.MAX_NUMBER_OF_DAYS_TO_CHECK}):")
-                if input_days.isdigit():
-                    days = int(input_days)
-                    if days > self.MAX_NUMBER_OF_DAYS_TO_CHECK:
-                        print(
-                            f"Maximum number of days is {self.MAX_NUMBER_OF_DAYS_TO_CHECK}")
-                        sys.exit()
-                else:
-                    print("Please enter a number")
-                    sys.exit()
-
-                appointments = self.check_appointments_for_next_days(
-                    self.start_date, int(input_days))
-
-                if appointments:
-                    print(
-                        f"!!! Appointments found !!!\nResult: {json.dumps(appointments, indent=2)}")
-                else:
-                    print("No appointments found")
-            else:
-                sys.exit()
+            self.ask_user_to_check_more_days()
 
     def get_user_input(self):
         """Get ZIP code and start date from user input."""
         self.zip_code = input(
             "Please enter your current zip code (e.g. 12345):")
         self.start_date = input(
-            "Please enter the date you want to start checking (e.g. 04/01/2021):")
+            "Please enter the date you want to start checking (e.g. 04/01/2023):")
 
     # call facilities API to get facility id and name tuples in a list
 
@@ -153,6 +129,42 @@ class USPSAppointmentChecker:
 
         return None
 
+    # check with user if more days need to be checked
+
+    def ask_user_to_check_more_days(self):
+        """Ask user to check more days if no appointments found."""
+        if self.appointments:
+            print(
+                f"!!! Appointments found !!!\nResult: {json.dumps(self.appointments, indent=2)}")
+        else:
+            print("No appointments found")
+            user_input = input(
+                f"You want to check for next few days (max {self.MAX_NUMBER_OF_DAYS_TO_CHECK} days from today)? (y/n):")
+            if user_input == 'y':
+
+                input_days = input(
+                    f"How many days do you want to check? (1-{self.MAX_NUMBER_OF_DAYS_TO_CHECK}):")
+                if input_days.isdigit():
+                    days = int(input_days)
+                    if days > self.MAX_NUMBER_OF_DAYS_TO_CHECK:
+                        print(
+                            f"Maximum number of days is {self.MAX_NUMBER_OF_DAYS_TO_CHECK}")
+                        sys.exit()
+                else:
+                    print("Please enter a number")
+                    sys.exit()
+
+                self.appointments = self.check_appointments_for_next_days(
+                    self.start_date, int(input_days))
+
+                if self.appointments:
+                    print(
+                        f"!!! Appointments found !!!\nResult: {json.dumps(self.appointments, indent=2)}")
+                else:
+                    print("No appointments found")
+            else:
+                sys.exit()
+
     # check appointments for up to next 30 days
     # if number_of_days == 0, means we only check input date
     # if number_of_days > 0, means we check input date and next number_of_days
@@ -166,6 +178,7 @@ class USPSAppointmentChecker:
         # initialize result dictionary
         result = {}
 
+        # check more appointments for next number of days
         more_days_to_check = number_of_days > 0
 
         if more_days_to_check:
@@ -245,7 +258,7 @@ class USPSAppointmentChecker:
             print(f"{error}. Failed to make the request.")
             sys.exit(1)
 
-    # normalize date in string to YYYYMMDD format in string
+    # normalize input string MM/DD/YYYY to YYYYMMDD format for API request
 
     def normalize_date(self, date_string):
         """Normalize the date"""
@@ -253,6 +266,8 @@ class USPSAppointmentChecker:
         date_object = datetime.datetime.strptime(date_string, '%m/%d/%Y')
         normalized_date = f"{date_object.year}{date_object.month:02d}{date_object.day:02d}"
         return normalized_date
+
+    # helper function to merge two dictionaries recursively
 
     def merge_dicts(self, dict1, dict2):
         """Merge two dictionaries and return new one"""
