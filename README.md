@@ -6,13 +6,28 @@
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-JackieQi-blue.svg?style=flat-square)](https://www.linkedin.com/in/chiqi/)
 # USPS Passport appointment finder
 
-[Entrance](https://tools.usps.com/rcas.htm)
+
 
 Little python script to help check available passport appointment for 30 days given specified location and start date.
 
 <p align="center">
   <img src="Resources/demo.gif" alt="animated" />
 </p>
+
+- [Helpful links](#helpful-links)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [API reference](#api-reference)
+- [Contributing](#contributing)
+- [Backstory](#backstory)
+
+
+
+## Helpful links
+[Appointment entrance](https://tools.usps.com/rcas.htm)
+
+[Processing time](https://travel.state.gov/content/travel/en/passports/how-apply/processing-times.html)
 
 ## Features
 - [x] search by zip and date
@@ -29,7 +44,7 @@ You need to install [pyhon3](ttps://www.python.org/downloads/) and its dependenc
 ## Usage
 ```$ python3 FILE_NAME```
 
-## APIs for reference
+## API reference
 **GET** facility details (id)
 ```
 curl --location 'https://tools.usps.com/UspsToolsRestServices/rest/v2/facilityScheduleSearch' \
