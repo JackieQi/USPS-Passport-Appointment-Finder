@@ -32,7 +32,6 @@ Little python script to help check available passport appointment for 30 days gi
 ## Features
 - [x] search by zip and date
 - [x] search for next one month continuously
-- [ ] search for many days in parallel
 
 ## Requirements
 
@@ -98,6 +97,12 @@ curl --location 'https://tools.usps.com/UspsToolsRestServices/rest/v2/appointmen
     "productType":"PASSPORT"
 }'
 ```
+
+## Todo
+- [ ] move hard coded info out of main class
+- [ ] load appointments with multi thread
+- [ ] book appointment with earliest date, time, location
+- [ ] add web frontend
 
 ## Contributing
 
