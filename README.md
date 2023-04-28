@@ -84,6 +84,11 @@ curl --location 'https://tools.usps.com/UspsToolsRestServices/rest/v2/appointmen
 }'
 ```
 
-## Background story
+## Contributing
+
+Before contributing, please read the instructions detailed here [contribution guide](https://github.com/JackieQi/USPSPassportAppointmentFinder/blob/main/CONTRIBUTING.md).
+
+## Backstory
+
 USPS website is so hard to use when searching for appointments. I have an international trip coming which requires visa after naturalization.
 It's pretty urgent for me to get the passport. Now here is the script to help whoever has the need.
