@@ -28,3 +28,64 @@ You need to install [pyhon3](ttps://www.python.org/downloads/) and its dependenc
 ## Usage
 ```$ python3 FILE_NAME```
 
+## APIs for reference
+**GET** facility details (id)
+```
+curl --location 'https://tools.usps.com/UspsToolsRestServices/rest/v2/facilityScheduleSearch' \
+--header 'Accept: application/json, text/javascript, */*; q=0.01' \
+--header 'Content-Type: application/json;charset=UTF-8' \
+--header 'x-requested-with: XMLHttpRequest' \
+--header 'sec-ch-ua-mobile: ?0' \
+--header 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36' \
+--data '{
+    "city": "",
+    "date": "20230503",
+    "zip5": "94404",
+    "numberOfAdults": "1",
+    "numberOfMinors": "0",
+    "poScheduleType": "PASSPORT",
+    "radius": "20",
+    "state": ""
+}'
+```
+**GET** appointments for specific facility and date
+```
+curl --location 'https://tools.usps.com/UspsToolsRestServices/rest/v2/appointmentTimeSearch' \
+--header 'Accept: application/json, text/javascript, */*; q=0.01' \
+--header 'Content-Type: application/json;charset=UTF-8' \
+--header 'x-requested-with: XMLHttpRequest' \
+--header 'sec-ch-ua-mobile: ?0' \
+--header 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36' \
+--data '{
+    "date":"20230523",
+    "productType":"PASSPORT",
+    "numberOfAdults":"1",
+    "numberOfMinors":"0",
+    "excludedConfirmationNumber":[""],
+    "fdbId":["1380637"],
+    "skipEndOfDayRecord":true
+}'
+```
+
+**GET** which date has open slot for appointment (*not used in the script*)
+```
+curl --location 'https://tools.usps.com/UspsToolsRestServices/rest/v2/appointmentDateSearch' \
+--header 'Accept: application/json, text/javascript, */*; q=0.01' \
+--header 'Content-Type: application/json;charset=UTF-8' \
+--header 'x-requested-with: XMLHttpRequest' \
+--header 'sec-ch-ua-mobile: ?0' \
+--header 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36' \
+--data '{
+    "numberOfAdults":"1",
+    "numberOfMinors":"0",
+    "fdbId":"1380637",
+    "productType":"PASSPORT"
+}'
+```
+
+## TODO
+Support multi-thread to check more days in parallel 
+
+## Background story
+USPS website is so hard to use when searching for appointments. I have an international trip coming which requires visa after naturalization.
+It's pretty urgent for me to get the passport. Now here is the script to help whoever has the need.
