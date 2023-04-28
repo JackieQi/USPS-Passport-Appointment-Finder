@@ -2,6 +2,8 @@
   <img src="Resources/United-States-Postal-Service-Logo.png" width="448" height="252"/>
 </p>
 
+[![Twitter](https://img.shields.io/badge/twitter-%40JackieQi-blue.svg?style=flat-square)](https://twitter.com/JackieQi)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-JackieQi-blue.svg?style=flat-square)](https://www.linkedin.com/in/chiqi/)
 # USPS Passport appointment finder
 
 [Entrance](https://tools.usps.com/rcas.htm)
@@ -12,11 +14,10 @@ Little python script to help check available passport appointment for 30 days gi
   <img src="Resources/demo.gif" alt="animated" />
 </p>
 
-### Features
-search by zip and date
-
-search for next one month
-
+## Features
+- [x] search by zip and date
+- [x] search for next one month continuously
+- [ ] search for many days in parallel
 
 ## Requirements
 
@@ -82,9 +83,6 @@ curl --location 'https://tools.usps.com/UspsToolsRestServices/rest/v2/appointmen
     "productType":"PASSPORT"
 }'
 ```
-
-## TODO
-Support multi-thread to check more days in parallel 
 
 ## Background story
 USPS website is so hard to use when searching for appointments. I have an international trip coming which requires visa after naturalization.
