@@ -3,6 +3,7 @@ import datetime
 import json
 import sys
 import requests
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 class USPSAppointmentChecker:
@@ -10,6 +11,7 @@ class USPSAppointmentChecker:
     # root url
     ROOT_URL = "https://tools.usps.com/UspsToolsRestServices/rest/v2"
     MAX_NUMBER_OF_DAYS_TO_CHECK = 30
+    MAX_NUMBER_OF_THREADS = 4
     appointments = []  # store all available appointments
 
     # declare request headers
@@ -221,21 +223,35 @@ class USPSAppointmentChecker:
     def search_appointments_with_date(self, date):
         """Search appointments with date"""
         result = {}
-        # search appointments from each facility
-        for facility in self.nearby_facilities:
-            appointments_per_facility_per_day = self.search_appointment_dates_per_facility(
-                facility[0], facility[1], date)
+        # search appointments from each facility in parallel
+        with ThreadPoolExecutor(max_workers=self.MAX_NUMBER_OF_THREADS) as executor:
+            # get appointments from each facility
+            threads = []
 
-            if appointments_per_facility_per_day:
-                # result contains facility name as key and appointments per day as value
-                facility_name = facility[1]
-                existing_facility_names = result.keys()
-                # if facility name is in result, update appointments per day
-                if facility_name in existing_facility_names:
-                    result[facility_name].update(
-                        appointments_per_facility_per_day)
-                else:
-                    result.update(appointments_per_facility_per_day)
+            for facility in self.nearby_facilities:
+                threads.append(executor.submit(
+                    self.search_appointment_dates_per_facility, facility[0], facility[1], date))
+
+            for index, task in enumerate(as_completed(threads)):
+                try:
+                    task_result = task.result()
+                except Exception as exception:
+                    print(f"Exception: {exception}")
+                    continue
+
+                if task_result:
+                    appointments_per_facility_per_day = task_result
+
+                    if appointments_per_facility_per_day:
+                        # result contains facility name as key and appointments per day as value
+                        facility_name = self.nearby_facilities[index]
+                        existing_facility_names = result.keys()
+                        # if facility name is in result, update appointments per day
+                        if facility_name in existing_facility_names:
+                            result[facility_name].update(
+                                appointments_per_facility_per_day)
+                        else:
+                            result.update(appointments_per_facility_per_day)
         return result
 
     # make API request
