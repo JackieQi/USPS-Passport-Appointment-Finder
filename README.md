@@ -44,64 +44,12 @@ You need to install [pyhon3](ttps://www.python.org/downloads/) and its dependenc
 ```$ python3 FILE_NAME```
 
 ## API reference
-**GET** facility details (id)
-```
-curl --location 'https://tools.usps.com/UspsToolsRestServices/rest/v2/facilityScheduleSearch' \
---header 'Accept: application/json, text/javascript, */*; q=0.01' \
---header 'Content-Type: application/json;charset=UTF-8' \
---header 'x-requested-with: XMLHttpRequest' \
---header 'sec-ch-ua-mobile: ?0' \
---header 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36' \
---data '{
-    "city": "",
-    "date": "20230503",
-    "zip5": "94404",
-    "numberOfAdults": "1",
-    "numberOfMinors": "0",
-    "poScheduleType": "PASSPORT",
-    "radius": "20",
-    "state": ""
-}'
-```
-**GET** appointments for specific facility and date
-```
-curl --location 'https://tools.usps.com/UspsToolsRestServices/rest/v2/appointmentTimeSearch' \
---header 'Accept: application/json, text/javascript, */*; q=0.01' \
---header 'Content-Type: application/json;charset=UTF-8' \
---header 'x-requested-with: XMLHttpRequest' \
---header 'sec-ch-ua-mobile: ?0' \
---header 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36' \
---data '{
-    "date":"20230523",
-    "productType":"PASSPORT",
-    "numberOfAdults":"1",
-    "numberOfMinors":"0",
-    "excludedConfirmationNumber":[""],
-    "fdbId":["1380637"],
-    "skipEndOfDayRecord":true
-}'
-```
-
-**GET** which date has open slot for appointment (*not used in the script*)
-```
-curl --location 'https://tools.usps.com/UspsToolsRestServices/rest/v2/appointmentDateSearch' \
---header 'Accept: application/json, text/javascript, */*; q=0.01' \
---header 'Content-Type: application/json;charset=UTF-8' \
---header 'x-requested-with: XMLHttpRequest' \
---header 'sec-ch-ua-mobile: ?0' \
---header 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36' \
---data '{
-    "numberOfAdults":"1",
-    "numberOfMinors":"0",
-    "fdbId":"1380637",
-    "productType":"PASSPORT"
-}'
-```
+Pleas refer to [API](https://github.com/JackieQi/USPSPassportAppointmentFinder/blob/main/API_Reference.md) document. 
+Including appointment searching, booking, cancellation.
 
 ## Todo
 - [ ] move hard coded info out of main class
-- [ ] load appointments with multi thread
-- [ ] book appointment with earliest date, time, location
+- [ ] book appointment with earliest date, time, location ([API](https://github.com/JackieQi/USPSPassportAppointmentFinder/blob/main/API_Reference.md) available here)
 - [ ] add web frontend
 
 ## Contributing
