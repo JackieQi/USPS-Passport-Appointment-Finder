@@ -1,2 +1,2 @@
-python-dotenv==1.0.0
 Requests==2.29.0
+configparser==5.3.0

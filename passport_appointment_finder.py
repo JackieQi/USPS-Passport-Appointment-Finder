@@ -1,11 +1,12 @@
 ''' find available passport appointments from usps website '''
+import configparser
 import datetime
 import json
-import os
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from dotenv import load_dotenv
 import requests
+
+config = configparser.ConfigParser()
 
 
 class USPSAppointmentChecker():
@@ -22,15 +23,21 @@ class USPSAppointmentChecker():
     }
 
     def __init__(self):
-        load_dotenv()  # load environment variables
         self.appointments = []  # store all available appointments
         self.zip_code = None
         self.start_date = None
         self.nearby_facilities = []
-        self.root_url = os.getenv("ROOT_URL")
-        self.max_number_of_days_to_check = int(os.getenv(
-            "MAX_NUMBER_OF_DAYS_TO_CHECK"))
-        self.max_number_of_threads = int(os.getenv("MAX_NUMBER_OF_THREADS"))
+
+        # read config file and load config
+        config.read('config.cfg')
+        print(f"Config: {config.sections()}")
+        print(f"Config url: {config.get('DEFAULT', 'ROOT_URL')}")
+        self.root_url = config.get('DEFAULT', 'ROOT_URL')
+
+        self.max_number_of_days_to_check = int(
+            config.get('DEFAULT', 'MAX_NUMBER_OF_DAYS_TO_CHECK'))
+        self.max_number_of_threads = int(
+            config.get('DEFAULT', 'MAX_NUMBER_OF_THREADS'))
 
     def run(self):
         """Run the main program."""

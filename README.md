@@ -42,6 +42,7 @@ You need to install [pyhon3](ttps://www.python.org/downloads/) and its package m
 
 ## Usage
 ```$ python3 FILE_NAME```
+configurations are stored in ```config.cfg``` file
 
 ## API reference
 Pleas refer to [API](https://github.com/JackieQi/USPSPassportAppointmentFinder/blob/main/API_Reference.md) document. 
