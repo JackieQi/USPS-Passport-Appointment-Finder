@@ -22,7 +22,7 @@ curl --location 'https://tools.usps.com/UspsToolsRestServices/rest/v2/facilitySc
 --data '{
     "city": "",
     "date": "$DATE", // 20230503
-    "zip5": "$ZIP_CODE", // 94404
+    "zip5": "$ZIP_CODE", // 94301
     "numberOfAdults": "1",
     "numberOfMinors": "0",
     "poScheduleType": "PASSPORT",

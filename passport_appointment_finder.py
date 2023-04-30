@@ -1,18 +1,15 @@
 ''' find available passport appointments from usps website '''
 import datetime
 import json
+import os
 import sys
-import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from dotenv import load_dotenv
+import requests
 
 
-class USPSAppointmentChecker:
+class USPSAppointmentChecker():
     ''' check available appointments for the next 30 days '''
-    # root url
-    ROOT_URL = "https://tools.usps.com/UspsToolsRestServices/rest/v2"
-    MAX_NUMBER_OF_DAYS_TO_CHECK = 30
-    MAX_NUMBER_OF_THREADS = 4
-    appointments = []  # store all available appointments
 
     # declare request headers
     headers = {
@@ -25,9 +22,15 @@ class USPSAppointmentChecker:
     }
 
     def __init__(self):
+        load_dotenv()  # load environment variables
+        self.appointments = []  # store all available appointments
         self.zip_code = None
         self.start_date = None
         self.nearby_facilities = []
+        self.root_url = os.getenv("ROOT_URL")
+        self.max_number_of_days_to_check = int(os.getenv(
+            "MAX_NUMBER_OF_DAYS_TO_CHECK"))
+        self.max_number_of_threads = int(os.getenv("MAX_NUMBER_OF_THREADS"))
 
     def run(self):
         """Run the main program."""
@@ -51,6 +54,8 @@ class USPSAppointmentChecker:
         else:
             self.ask_user_to_check_more_days()
 
+    # get user input from the command line
+
     def get_user_input(self):
         """Get ZIP code and start date from user input."""
         self.zip_code = input(
@@ -62,7 +67,7 @@ class USPSAppointmentChecker:
 
     def find_nearby_facilities(self, start_date):
         """Get facilities"""
-        url = f"{self.ROOT_URL}/facilityScheduleSearch"
+        url = f"{self.root_url}/facilityScheduleSearch"
 
         # define request payload
         payload = {
@@ -93,7 +98,7 @@ class USPSAppointmentChecker:
 
     def search_appointment_dates_per_facility(self, facility_id, name, date):
         """Search appointments"""
-        url = f"{self.ROOT_URL}/appointmentTimeSearch"
+        url = f"{self.root_url}/appointmentTimeSearch"
 
         # define request payload
         payload = {
@@ -140,32 +145,53 @@ class USPSAppointmentChecker:
                 f"!!! Appointments found !!!\nResult: {json.dumps(self.appointments, indent=2)}")
         else:
             print("No appointments found")
-            user_input = input(
-                f"You want to check for next few days (max {self.MAX_NUMBER_OF_DAYS_TO_CHECK} days from today)? (y/n):")
-            if user_input == 'y':
-
-                input_days = input(
-                    f"How many days do you want to check? (1-{self.MAX_NUMBER_OF_DAYS_TO_CHECK}):")
-                if input_days.isdigit():
-                    days = int(input_days)
-                    if days > self.MAX_NUMBER_OF_DAYS_TO_CHECK:
-                        print(
-                            f"Maximum number of days is {self.MAX_NUMBER_OF_DAYS_TO_CHECK}")
-                        sys.exit()
-                else:
-                    print("Please enter a number")
-                    sys.exit()
-
-                self.appointments = self.check_appointments_for_next_days(
-                    self.start_date, int(input_days))
-
-                if self.appointments:
-                    print(
-                        f"!!! Appointments found !!!\nResult: {json.dumps(self.appointments, indent=2)}")
-                else:
-                    print("No appointments found")
+            selection = self.handle_check_more_days_selection()
+            if selection:
+                self.handle_selection_of_days_input()
             else:
+                print("Exiting...")
                 sys.exit()
+
+    # handle user input for checking more days
+
+    def handle_check_more_days_selection(self):
+        """Validate user input"""
+        user_input = input(
+            f"You want to check for next few days (max {self.max_number_of_days_to_check} days from today)? (y/n):")
+
+        if user_input == 'y':
+            return True
+        if user_input == 'n':
+            return False
+
+        print("Please enter y or n")
+        return self.handle_check_more_days_selection()
+
+    # handle user input for number of days to check
+
+    def handle_selection_of_days_input(self):
+        """Handle user input for number of days to check."""
+        input_days = input(
+            f"How many days do you want to check? (1-{self.max_number_of_days_to_check}):")
+        if input_days.isdigit():
+            days = int(input_days)
+            if days > self.max_number_of_days_to_check:
+                print(
+                    f"Maximum number of days is {self.max_number_of_days_to_check}")
+                self.handle_selection_of_days_input()
+        else:
+            print("Please enter a number")
+            self.handle_selection_of_days_input()
+
+        self.appointments = self.check_appointments_for_next_days(
+            self.start_date, int(input_days))
+
+        if self.appointments:
+            print(
+                f"!!! Appointments found !!!\nResult: {json.dumps(self.appointments, indent=2)}")
+        else:
+            print("No appointments found")
+            sys.exit()
 
     # check appointments for up to next 30 days
     # if number_of_days == 0, means we only check input date
@@ -224,7 +250,7 @@ class USPSAppointmentChecker:
         """Search appointments with date"""
         result = {}
         # search appointments from each facility in parallel
-        with ThreadPoolExecutor(max_workers=self.MAX_NUMBER_OF_THREADS) as executor:
+        with ThreadPoolExecutor(max_workers=self.max_number_of_threads) as executor:
             # get appointments from each facility
             threads = []
 

@@ -35,9 +35,9 @@ Little python script to help check available passport appointment for 30 days gi
 
 ## Requirements
 
-You need to install [pyhon3](ttps://www.python.org/downloads/) and its dependencies (pip, venv)
+You need to install [pyhon3](ttps://www.python.org/downloads/) and its package manager [pip](https://pip.pypa.io/en/stable/installation/#get-pip-py), then install required packages
 
-```python3 -m pip install requests```
+```pip3 install -r requirements.txt```
 
 
 ## Usage
@@ -49,7 +49,9 @@ Including appointment searching, booking, cancellation.
 
 ## Todo
 - [ ] move hard coded info out of main class
-- [ ] book appointment with earliest date, time, location ([API](https://github.com/JackieQi/USPSPassportAppointmentFinder/blob/main/API_Reference.md) available here)
+- [ ] add exception handler
+- [ ] book closest appointment ([API](https://github.com/JackieQi/USPSPassportAppointmentFinder/blob/main/API_Reference.md) available here)
+- [ ] add CLI with parameters
 - [ ] add web frontend
 
 ## Contributing
