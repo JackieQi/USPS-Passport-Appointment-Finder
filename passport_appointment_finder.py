@@ -30,8 +30,6 @@ class USPSAppointmentChecker():
 
         # read config file and load config
         config.read('config.cfg')
-        print(f"Config: {config.sections()}")
-        print(f"Config url: {config.get('DEFAULT', 'ROOT_URL')}")
         self.root_url = config.get('DEFAULT', 'ROOT_URL')
 
         self.max_number_of_days_to_check = int(
@@ -103,7 +101,7 @@ class USPSAppointmentChecker():
 
     # seearch appointments from each facility
 
-    def search_appointment_dates_per_facility(self, facility_id, name, date):
+    def search_appointments_on_date_per_facility(self, facility_id, name, date):
         """Search appointments"""
         url = f"{self.root_url}/appointmentTimeSearch"
 
@@ -142,6 +140,85 @@ class USPSAppointmentChecker():
                 return facility_name_appointments_dictionary
 
         return None
+
+    # check earliest apponintments from nearby facilities
+
+    def find_closest_appointment_with_zip_code(self, zip_code):
+        """Find closest appointment with ZIP code."""
+        # get user input (zip code and start date)
+        self.zip_code = zip_code
+
+        # covert date to string
+        today = datetime.date.today()
+        # 05/01/2021
+        start_date = f"{today.month:02d}/{today.day:02d}/{today.year}"
+        # 20210501
+        start_date_variation = f"{today.year}{today.month:02d}{today.day:02d}"
+        self.start_date = start_date
+
+        # check appointments for start date
+        appointments = self.find_earliest_appointments(
+            start_date_variation)
+
+        # if no appointments found, ask user to check more days
+        if appointments:
+            print(
+                f"!!! Appointments found !!!\nResult: {json.dumps(appointments, indent=2)}")
+        else:
+            print("No appointments for next 30 days. Please check later.")
+
+    # find earliest appointment date from specific facility
+    def find_earliest_appointments(self, start_date):
+        """Find earliest appointment date from nearby facilities."""
+
+        self.nearby_facilities = self.find_nearby_facilities(start_date)
+
+        result = {}
+        # search appointments from each facility in parallel
+        with ThreadPoolExecutor(max_workers=self.max_number_of_threads) as executor:
+            # get appointments from each facility
+            threads = []
+
+            for facility in self.nearby_facilities:
+                threads.append(executor.submit(
+                    self.get_available_appointment_date_per_facility, facility[0]))
+
+            for index, task in enumerate(as_completed(threads)):
+                try:
+                    task_result = task.result()
+                except Exception as exception:
+                    print(f"Exception: {exception}")
+                    continue
+
+                if task_result:  # find appointment date from specific facility
+                    appointments = self.search_appointments_on_date_per_facility(
+                        facility[0], facility[1], task_result)
+
+                    print(f"the result is: {appointments}")
+                    # TODO: check all appointment time from the date in response above
+        return result
+
+    # this is used to find the earliest appointment date from a specific facility
+    def get_available_appointment_date_per_facility(self, facility_id):
+        '''find earliest appointment date from specific facility'''
+
+        url = f"{self.root_url}/appointmentDateSearch"
+
+        payload = {
+            "numberOfAdults": "1",
+            "numberOfMinors": "0",
+            "fdbId": facility_id,
+            "productType": "PASSPORT"
+        }
+
+        response = self.make_request(url, payload)
+
+        # check error from response
+        if 'error' in response:
+            print(f"Server Error: {response['error']}")
+            sys.exit()
+
+        return response['dates']
 
     # check with user if more days need to be checked
 
@@ -263,7 +340,7 @@ class USPSAppointmentChecker():
 
             for facility in self.nearby_facilities:
                 threads.append(executor.submit(
-                    self.search_appointment_dates_per_facility, facility[0], facility[1], date))
+                    self.search_appointments_on_date_per_facility, facility[0], facility[1], date))
 
             for index, task in enumerate(as_completed(threads)):
                 try:
