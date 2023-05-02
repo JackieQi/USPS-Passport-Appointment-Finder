@@ -19,9 +19,10 @@ Little python script to help check available passport appointment for 30 days gi
 - [Requirements](#requirements)
 - [Usage](#usage)
 - [API reference](#api-reference)
+- [Todo](#todo)
+- [In progress](#in-progress)
 - [Contributing](#contributing)
 - [Backstory](#backstory)
-
 
 
 ## Helpful links
@@ -32,6 +33,7 @@ Little python script to help check available passport appointment for 30 days gi
 ## Features
 - [x] search by zip and date
 - [x] search for next one month continuously
+- [x] Ready to use curl command, postman support coming soon
 
 ## Requirements
 
@@ -55,8 +57,13 @@ Including appointment searching, booking, cancellation.
 - [ ] move hard coded info out of main class
 - [ ] add exception handler
 - [ ] book closest appointment ([API](https://github.com/JackieQi/USPSPassportAppointmentFinder/blob/main/API_Reference.md) available here)
-- [ ] add CLI with parameters
+- [ ] API documentation page with try out
+- [ ] postman collection
 - [ ] add web frontend
+
+## In progress
+- [x] add CLI with parameters (--zipcode --date)
+- [x] postman collection to share
 
 ## Contributing
 
