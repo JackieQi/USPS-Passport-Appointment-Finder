@@ -54,7 +54,7 @@ or ```$ python3 appointment_finder_cli.py --zipcode 12345```
 *configurations like email, phone are stored in ```config.cfg``` file*
 
 ### Postman collection
-There are two files. [Environment](https://github.com/JackieQi/USPSPassportAppointmentFinder/Resources/USPS-Environment.postman_environment.json) and [API](https://github.com/JackieQi/USPSPassportAppointmentFinder/Resources/USPS-APIs.postman_collection.json)
+There are two files. [Environment](https://github.com/JackieQi/USPSPassportAppointmentFinder/blob/main/Resources/USPS-Environment.postman_environment.json) and [API](https://github.com/JackieQi/USPSPassportAppointmentFinder/blob/main/Resources/USPS-APIs.postman_collection.json)
 
 Just to update current value in environment then run the APIs
 
