@@ -33,7 +33,10 @@ Little python script to help check available passport appointment for 30 days gi
 ## Features
 - [x] search by zip and date
 - [x] search for next one month continuously
-- [x] Ready to use curl command, postman support coming soon
+- [x] book appointment
+- [x] cancel appointment
+- [x] Ready to use curl command and postman collection
+
 
 ## Requirements
 
@@ -43,27 +46,30 @@ It requires Python 3.8 or higher, check your Python version first. You need to i
 
 
 ## Usage
+
+### Terminal
 ```$ python3 passport_appointment_finder.py```
 
-*configurations are stored in ```config.cfg``` file*
-
 or ```$ python3 appointment_finder_cli.py --zipcode 12345```
+*configurations like email, phone are stored in ```config.cfg``` file*
+
+### Postman collection
+There are two files. [Environment](https://github.com/JackieQi/USPSPassportAppointmentFinder/Resources/USPS-Environment.postman_environment.json) and [API](https://github.com/JackieQi/USPSPassportAppointmentFinder/Resources/USPS-APIs.postman_collection.json)
+
+Just to update current value in environment then run the APIs
 
 ## API reference
 Pleas refer to [API](https://github.com/JackieQi/USPSPassportAppointmentFinder/blob/main/API_Reference.md) document. 
 Including appointment searching, booking, cancellation.
 
-## Todo
-- [ ] move hard coded info out of main class
-- [ ] add exception handler
-- [ ] book closest appointment ([API](https://github.com/JackieQi/USPSPassportAppointmentFinder/blob/main/API_Reference.md) available here)
-- [ ] API documentation page with try out
-- [ ] postman collection
-- [ ] add web frontend
-
 ## In progress
 - [x] add CLI with parameters (--zipcode --date)
-- [x] postman collection to share
+- [x] support menu
+
+
+## Todo
+- [ ] code refactor with exception handler
+- [ ] add web frontend
 
 ## Contributing
 
