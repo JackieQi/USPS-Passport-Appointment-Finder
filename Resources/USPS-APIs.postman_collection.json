@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6d6c9373-dea2-47dc-9dd2-ffef829e93be",
+		"_postman_id": "05172797-8b34-4e67-9feb-d5fd1eb27ab3",
 		"name": "USPS-APIs",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -38,7 +38,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"city\": \"\",\n    \"date\": {{date}},\n    \"zip5\": \"{{zip-code}}\",\n    \"numberOfAdults\": \"1\",\n    \"numberOfMinors\": \"0\",\n    \"poScheduleType\": \"PASSPORT\",\n    \"radius\": \"20\",\n    \"state\": \"\"\n}"
+					"raw": "{\n    \"city\": \"\",\n    \"date\": \"{{date}}\",\n    \"zip5\": \"{{zip-code}}\",\n    \"numberOfAdults\": \"1\",\n    \"numberOfMinors\": \"0\",\n    \"poScheduleType\": \"PASSPORT\",\n    \"radius\": \"20\",\n    \"state\": \"\"\n}"
 				},
 				"url": {
 					"raw": "https://tools.usps.com/UspsToolsRestServices/rest/v2/facilityScheduleSearch",
@@ -91,7 +91,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"date\":{{date}},\n    \"productType\":\"PASSPORT\",\n    \"numberOfAdults\":\"1\",\n    \"numberOfMinors\":\"0\",\n    \"excludedConfirmationNumber\":[\"\"],\n    \"fdbId\":[{{facility-id}}],\n    \"skipEndOfDayRecord\":true\n}"
+					"raw": "{\n    \"date\": \"{{date}}\",\n    \"productType\":\"PASSPORT\",\n    \"numberOfAdults\":\"1\",\n    \"numberOfMinors\":\"0\",\n    \"excludedConfirmationNumber\":[\"\"],\n    \"fdbId\":[\"{{facility-id}}\"],\n    \"skipEndOfDayRecord\":true\n}"
 				},
 				"url": {
 					"raw": "https://tools.usps.com/UspsToolsRestServices/rest/v2/appointmentTimeSearch",
@@ -197,7 +197,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"confirmationNumber\": {{internal-confirmation-number}}\n}"
+					"raw": "{\n    \"confirmationNumber\": \"{{internal-confirmation-number}}\"\n}"
 				},
 				"url": {
 					"raw": "https://tools.usps.com/UspsToolsRestServices/rest/v2/appointmentByConfirmation",
@@ -250,7 +250,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{   \n    \"confirmationNumber\": {{public-facing-confirmation-number}},\n    \"customerEmailAddress\": {{email}},\n    \"customerPhone\":\"\"\n}"
+					"raw": "{   \n    \"confirmationNumber\": \"{{public-facing-confirmation-number}}\",\n    \"customerEmailAddress\": \"{{email}}\",\n    \"customerPhone\":\"\"\n}"
 				},
 				"url": {
 					"raw": "https://tools.usps.com/UspsToolsRestServices/rest/v2/appointmentByConfirmationPhoneEmail",
@@ -456,7 +456,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n   \"customer\":{\n      \"firstName\": {{first_name}},\n      \"lastName\": {{last_name}},\n      \"regId\":\"\"\n   },\n   \"customerEmailAddress\": {{email}},\n   \"customerPhone\":{\n      \"areaCode\": {{phone-area-code}},\n      \"exchange\": {{phone-exchange-code}},\n      \"line\": {{phone-line-number}},\n      \"textable\": true\n   },\n   \"date\": {{date}},\n   \"fdbId\": {{facility-id}},\n   \"numberOfAdults\":\"1\",\n   \"numberOfMinors\":\"0\",\n   \"schedulingType\":\"PASSPORT\",\n   \"serviceCenter\":\"Web Service Center\",\n   \"time\": {{time}},\n   \"passportPhotoIndicator\":1\n}"
+					"raw": "{\n   \"customer\":{\n      \"firstName\": \"{{first_name}}\",\n      \"lastName\": \"{{last_name}}\",\n      \"regId\":\"\"\n   },\n   \"customerEmailAddress\": \"{{email}}\",\n   \"customerPhone\":{\n      \"areaCode\": \"{{phone-area-code}}\",\n      \"exchange\": \"{{phone-exchange-code}}\",\n      \"line\": \"{{phone-line-number}}\",\n      \"textable\": true\n   },\n   \"date\": \"{{date}}\",\n   \"fdbId\": \"{{facility-id}}\",\n   \"numberOfAdults\":\"1\",\n   \"numberOfMinors\":\"0\",\n   \"schedulingType\":\"PASSPORT\",\n   \"serviceCenter\":\"Web Service Center\",\n   \"time\": \"{{time}}\",\n   \"passportPhotoIndicator\":1\n}"
 				},
 				"url": {
 					"raw": "https://tools.usps.com/UspsToolsRestServices/rest/v2/createAppointment",
@@ -544,7 +544,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"confirmationNumber\": {{internal-confirmation-number}},\n    \"cancelReason\":\"DONOTNEED\"\n}"
+					"raw": "{\n    \"confirmationNumber\": \"{{internal-confirmation-number}}\",\n    \"cancelReason\":\"DONOTNEED\"\n}"
 				},
 				"url": {
 					"raw": "https://tools.usps.com/UspsToolsRestServices/rest/v2/cancelAppointment",
